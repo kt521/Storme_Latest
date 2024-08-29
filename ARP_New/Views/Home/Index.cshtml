@@ -1,0 +1,567 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+
+}
+<style>
+    td{
+        width:100px
+    }
+    #MyTable {
+        display: inline-table;
+    }
+</style>
+
+<main id="main" class="main">
+    
+
+    <div class="pagetitle">
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
+
+            </ol>
+        </nav>
+        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1" style=" margin-left: 96%;"> <i class="bi bi-filter-square-fill"></i></a>
+        <a class="btn btn-primary" role="button" onclick="ExportReportData()" style=" margin-left: 91%;
+    margin-top: -56px;"><i class="bi bi-file-earmark-excel"></i></a>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="col">
+            <div class="collapse multi-collapse" id="multiCollapseExample1">
+                <div class="card card-body">
+                    <div class="col-12">
+                        <label for="Report" class="col-sm-2 col-form-label">Report Type</label>
+                        <div class="col-sm-2">
+                            <select id="Report" class="form-select">
+                                <option value="1">Daily</option>
+                                <option value="2">Monthly</option>
+                            </select>
+                        </div>
+                        <label for="inputDate" class="col-sm-2 col-form-label"> Start Date</label>
+                        <div class="col-sm-2">
+                            <input id="dtDate" type="date" class="form-control">
+                        </div>
+
+
+                        <div><button class=" col-sm-2 btn btn-primary" onclick="GetReportType()">Report</button></div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <!-- Left side columns -->
+            <div class="col-lg-12">
+                <div class="row">
+
+                    <!-- Recent Sales -->
+                    <div class="col-12">
+                        <div class="card recent-sales overflow-auto">
+
+                            <div style="text-align:right">
+
+                                <button class="accordion-button collapsed" data-bs-target="#faqsThree-1" type="button" data-bs-toggle="collapse" style="font-size: 2rem; float: right !important; margin-right: 81% " aria-expanded="false"></button>
+
+                            </div>
+
+                            <div class="card-body">
+                                <h5 class="card-title">Report <span>| Daily</span></h5>
+
+                                <table class="table table-borderless table table-striped" id="MyTable" style="display: inline-table !important">
+                                    <thead>
+                                        <tr>
+                                            <td colspan="5" style="color:red;text-align:Default">
+                                                AHMEDABAD MUNICIPAL CORPORATION
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1">Report Name :</td>
+                                            <td colspan="4">
+                                                <b>
+                                                    Daily Report
+                                                </b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1">Zone Name :</td>
+                                            <td colspan="4">
+                                                <b id="ZoneName">  </b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1">Location Name :</td>
+                                            <td colspan="4">
+                                                <b> @ViewBag.search </b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1">Report Date :</td>
+                                            <td colspan="4" style="text-align:justify">
+                                                <p id="dtDateDisplay"><b> @DateTime.Now</b></p>
+
+                                            </td>
+                                        </tr>
+                                        @*<tr>
+            <th colspan="5" style="TEXT-ALIGN: center;">INLET</th>
+            <th colspan="7" style="TEXT-ALIGN: center;">OUTLET</th>
+        </tr>*@
+                                        <tr>
+                                            <th scope="col">Date Time</th>
+                                            <th scope="col">Level (Mtr.)</th>
+                                            <th scope="col">Flow (m3/Hr)</th>
+                                            <th scope="col">Total (MLD)</th>
+                                            <th scope="col">Till Today Total(ML)</th>
+                                            @*<th scope="col">Flow (m3/Hr)</th>
+            <th scope="col">Total (MLD)</th>
+            <th scope="col">PH</th>
+            <th scope="col">TSS</th>
+            <th scope="col">CL</th>
+            <th scope="col">BOD</th>
+            <th scope="col">COD</th>*@
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblBody"></tbody>
+                                </table>
+                                <table class="table table-borderless table table-striped" style="display:none" id="MyMonthlyTable">
+                                    <thead>
+
+                                        <tr>
+                                            <td colspan="12" style="color:red;text-align:Default">
+                                                AHMEDABAD MUNICIPAL CORPORATION
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1">Report Name :</td>
+                                            <td colspan="11">
+                                                <b>
+                                                    Monthly Report
+                                                </b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1">Location Name :</td>
+                                            <td colspan="11">
+                                                <b> @ViewBag.search </b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1">Report Date :</td>
+                                            <td colspan="11" style="text-align:justify">
+                                                <p id="dtDateDisplay"><b> @DateTime.Now</b></p>
+
+
+                                            </td>
+                                        </tr>
+                                        @*<tr>
+                                                <th colspan="5" style="TEXT-ALIGN: center;">INLET</th>
+                                                <th colspan="7" style="TEXT-ALIGN: center;">OUTLET</th>
+                                            </tr>*@
+                                        <tr>
+                                            <th scope="col">Date Time</th>
+                                            <th scope="col">Total (MLD)</th>
+
+                                            <th scope="col">Till Today QTY.(MLD)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblMonthalyBody"></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div><!-- End Recent Sales -->
+                    <!-- Top Selling -->
+
+
+                </div>
+            </div><!-- End Left side columns -->
+
+
+        </div>
+    </section>
+
+</main><!-- End #main -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- Include jsPDF-Autotable plugin from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+<script src="~/Content/assets/js/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+
+        GetPLCData(1);
+    });
+    function GetReportType() {
+        var ReportType = document.getElementById("Report").value;
+        if (ReportType == "1") {
+            GetPLCData(1);
+            document.getElementById("MyTable").style.display = "inline-table";
+            document.getElementById("MyMonthlyTable").style.display = "none";
+        }
+        else {
+            GetPlcMonthlyData();
+            $("#MyTable")
+            document.getElementById("MyTable").style.display = "none";
+            document.getElementById("MyMonthlyTable").style.display = "inline-table";
+        }
+    }
+    
+    function GetPlcMonthlyData(inpageindex) {
+        
+        $('.loading-modal').show();
+        debugger;
+        var SearchData = '@ViewBag.search';
+        var dtdate = '@DateTime.Now.ToString("yyyy-MM-dd")';
+        var tagDT = document.getElementById("dtDate").value;
+        if (tagDT != "") {
+            var dtdate = tagDT;
+            var dtdate1 = tagDT.split("-");
+            var newdate = dtdate1[2] + '-' + dtdate1[1] + '-' + dtdate1[0] + ' 12:00:00 AM'
+            $("#dtDateDisplay").empty();
+            $("#dtDateDisplay").append("<b>" + newdate + "</b>");
+        }
+        if (SearchData == "") {
+            SearchData = "SHREENAND NAGAR"
+        }
+
+        var cls = {
+
+            strName: SearchData,
+            strDateandTime: dtdate//"2024-05-15",
+
+        }
+        $.ajax({
+            url: '/Home/GetMonthData',
+            contentType: "application/json; charset=utf-8",
+            type: "POST",
+            data: JSON.stringify({
+                cls: cls
+            }),
+            success: function (data) {
+                var string = "";
+                if (data != null) {
+                    $("#tblMonthalyBody").empty();
+                    for (var i = 0; data.length > i; i++) {
+                        string = string + "<tr>";
+                        string = string + "<td> " + data[i].strDateandTime + "</td>";
+                        string = string + "<td> " + data[i].decTotal + "</td>";
+                        string = string + "<td> " + data[i].decTillTodayQty + "</td>";
+                        //string = string + "<td> " + data[i].strinPH + "</td>";
+                        //string = string + "<td> " + data[i].strinTss + "</td>";
+                        //string = string + "<td>" + data[i].stroutFlowM3hr + "</td>";
+                        //string = string + "<td>" + data[i].stroutTotalMDR + "</td>";
+                        //string = string + "<td>" + data[i].stroutPH + "</td>";
+                        //string = string + "<td>" + data[i].stroutTss + "</td>";
+                        //string = string + "<td>" + data[i].stroutcl + "</td>";
+                        //string = string + "<td>" + data[i].strOutBod + "</td>";
+                        //string = string + "<td>" + data[i].strOutCod + "</td>";
+                        string = string + "</tr>";
+                    }
+                    $("#tblMonthalyBody").append(string);
+                }
+            },
+            error: function (xyz) {
+                $('.loading-modal').hide();
+                alert('errors');
+            }
+        });
+
+    }
+    function GetPLCData(inpageindex) {
+        $('.loading-modal').show();
+        debugger;
+        var SearchData = '@ViewBag.search';
+        var ZoneName = '@ViewBag.ZoneName';
+        var dtdate = '@DateTime.Now.ToString("yyyy-MM-dd")';
+        var tagDT = document.getElementById("dtDate").value;
+        if (tagDT != "") {
+            var dtdate = tagDT;
+            var dtdate1 = tagDT.split("-");
+            var newdate = dtdate1[2] + '-' + dtdate1[1] + '-' + dtdate1[0] + ' 12:00:00 AM'
+            $("#dtDateDisplay").empty();
+            $("#dtDateDisplay").append("<b>" + newdate + "</b>");
+        }
+        if (SearchData == "") {
+            SearchData = "SHREENAND NAGAR"
+        }
+        debugger;
+        var cls = {
+
+            strName: SearchData,
+            strDateandTime: dtdate//"2024-05-15",
+
+        }
+        $.ajax({
+            url: '/Home/GetData',
+            contentType: "application/json; charset=utf-8",
+            type: "POST",
+            data: JSON.stringify({
+                cls: cls
+            }),
+            success: function (data) {
+                debugger;
+                $("#ZoneName").text('@ViewBag.ZoneName');
+                var string = "";
+                if (data != null) {
+                    $("#tblBody").empty();
+                    for (var i = 0; data.length > i; i++) {
+                        string = string + "<tr>";
+                        string = string + "<td> " + data[i].strDateandTime + "</td>";
+                        string = string + "<td> " + data[i].decLevel + "</td>";
+                        string = string + "<td> " + data[i].decFlowRate + "</td>";
+                        string = string + "<td> " + data[i].decCurrentDayQty + "</td>";
+                        string = string + "<td> " + data[i].decTillTodayQty + "</td>";
+                        //string = string + "<td>" + data[i].stroutFlowM3hr + "</td>";
+                        //string = string + "<td>" + data[i].stroutTotalMDR + "</td>";
+                        //string = string + "<td>" + data[i].stroutPH + "</td>";
+                        //string = string + "<td>" + data[i].stroutTss + "</td>";
+                        //string = string + "<td>" + data[i].stroutcl + "</td>";
+                        //string = string + "<td>" + data[i].strOutBod + "</td>";
+                        //string = string + "<td>" + data[i].strOutCod + "</td>";
+                        string = string + "</tr>";
+                    }
+                    if (data.length == 0) {
+                        string = string + "<tr>";
+                        string = string + "<td colspan='12'> No data found </td>";
+
+                        string = string + "</tr>"; 
+                    }
+                   
+                }
+                else {
+                    string = string + "<tr>";
+                    string = string + "<td colspan='12'> No data found </td>";
+                    
+                    string = string + "</tr>";
+                }
+                $("#tblBody").append(string);
+            },
+            error: function (xyz) {
+                $('.loading-modal').hide();
+                alert('errors');
+            }
+        });
+
+    }
+
+    function exportTableToExcel(filename) {
+        debugger;
+        var ReportType = $("#Report option:selected").text();
+        var ReportTypeValue = $("#Report option:selected").val();
+        filename = ReportType + '-' + filename;
+        //var dt = document.getElementById('dtStartDate').value;
+        //filename = filename.replace("_Dashboard", "");
+
+        //if (dt == '' || dt == null) {
+        //    filename = filename + '_' + getTodayDate().replace('/', '_') + '.xls'
+        //}
+        //else {
+        //    filename = filename + '_' + dt.replace('/', '_') + '.xls'
+        //}
+
+        // var date = document.getElementById('dtStartDate').value;
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        if (ReportTypeValue == '1')
+            var tableSelect = document.getElementById("MyTable");
+        else {
+            var tableSelect = document.getElementById("MyMonthlyTable");
+        }
+
+        var tblHTML = tableSelect.outerHTML;
+        tblHTML = tblHTML.replaceAll('<th', '<th  style="border: 1px solid black;"')
+        tblHTML = tblHTML.replaceAll('<td', '<td  style="border: 1px solid black;"')
+
+        var finalFString = 'style="border: 1px solid #c7c7c7 !important; background: #8888f5;color: black !important;"';
+        var finalSString = 'style="border: 1px solid #c7c7c7 !important; background: #86dc85;color: black !important;"';
+
+        var tableHTML = tblHTML.replace(/style="border: 1px solid #c7c7c7 !important; background: #8888f5;color: black !important;"/g, 'style="border: 1px solid;"');
+        tableHTML = tableHTML.replace(/style="border: 1px solid #c7c7c7 !important; background: #86dc85;color: black !important;"/g, 'style="border: 1px solid;"');
+        tableHTML = tableHTML.replace(/ /g, '%20');
+
+
+        var reportName = filename;
+
+        // Create download link element
+        downloadLink = document.createElement("a");
+
+        document.body.appendChild(downloadLink);
+
+        if (navigator.msSaveOrOpenBlob) {
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            // Create a link to the file
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+            // Setting the file name
+            downloadLink.download = filename;
+
+            //triggering the function
+            downloadLink.click();
+        }
+    }
+
+
+
+    function demoFromHTML() {
+        const { jsPDF } = window.jspdf;
+
+        var pdf = new jsPDF('p', 'pt', 'letter');
+
+        pdf.cellInitialize();
+        pdf.setFontSize(10);
+        $.each($('#MyTable tr'), function (i, row) {
+            $.each($(row).find("td, th"), function (j, cell) {
+                var txt = $(cell).text().trim() || " ";
+                var width = (j == 4) ? 40 : 70; //make 4th column smaller
+                pdf.cell(10, 50, width, 30, txt, i);
+            });
+        });
+
+        pdf.save('sample-file.pdf');
+    }
+    function ExportReportData() {
+        var ReportTypeValue = $("#Report option:selected").val();
+        if (ReportTypeValue == '1')
+            GetExportDailyData();
+        else {
+            GetExportMonthalyData();
+        }
+    }
+    function GetExportMonthalyData() {
+        $('.loading-modal').show();
+        debugger;
+        var zonename = '@ViewBag.ZoneName';
+        var SearchData = '@ViewBag.search';
+        var dtdate = '@DateTime.Now.ToString("yyyy-MM-dd")';
+        var tagDT = document.getElementById("dtDate").value;
+        if (tagDT != "") {
+            var dtdate = tagDT;
+            var dtdate1 = tagDT.split("-");
+            var newdate = dtdate1[2] + '-' + dtdate1[1] + '-' + dtdate1[0] + ' 12:00:00 AM'
+            $("#dtDateDisplay").empty();
+            $("#dtDateDisplay").append("<b>" + newdate + "</b>");
+        }
+        if (SearchData == "") {
+            SearchData = "SHREENAND NAGAR"
+        }
+        debugger;
+        var cls = {
+            strName: SearchData,
+            strDateandTime: dtdate,//"2024-05-15",
+            ZoneName: zonename
+
+        }
+        $.ajax({
+            url: '/Home/ExporttoExcel',
+            contentType: "application/json; charset=utf-8",
+            type: "POST",
+            data: JSON.stringify({
+                cls: cls
+            }),
+            xhrFields: {
+                responseType: 'blob' // Set the response type to blob to handle binary data
+            },
+            success: function (data) {
+                debugger
+                var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download =  'Monthly-ReportFile.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+
+                //var iframe = $('<iframe>', {
+                //    id: 'downloadFrame',
+                //    style: 'display: none'
+                //}).appendTo('body');
+
+                //iframe.attr('src', '/Home/ExportData' + );
+
+                //alert('Export initiated! Please check your download folder.');
+
+                //setTimeout(function () {
+                //    iframe.remove();
+                //}, 5000);
+            },
+            error: function (xyz) {
+                $('.loading-modal').hide();
+                alert('errors');
+            }
+        });
+    }   
+     function GetExportDailyData() {
+        $('.loading-modal').show();
+         debugger;
+         var zone = '@ViewBag.ZoneName';
+        var SearchData = '@ViewBag.search';
+        var dtdate = '@DateTime.Now.ToString("yyyy-MM-dd")';
+        var tagDT = document.getElementById("dtDate").value;
+        if (tagDT != "") {
+            var dtdate = tagDT;
+            var dtdate1 = tagDT.split("-");
+            var newdate = dtdate1[2] + '-' + dtdate1[1] + '-' + dtdate1[0] + ' 12:00:00 AM'
+            $("#dtDateDisplay").empty();
+            $("#dtDateDisplay").append("<b>" + newdate + "</b>");
+        }
+        if (SearchData == "") {
+            SearchData = "SHREENAND NAGAR"
+        }
+        debugger;
+        var cls = {
+            strName: SearchData,
+            strDateandTime: dtdate,//"2024-05-15",
+            ZoneName: zone
+        }
+        $.ajax({
+            url: '/Home/ExporttoExcelDaily',
+            contentType: "application/json; charset=utf-8",
+            type: "POST",
+            data: JSON.stringify({
+                cls: cls
+            }),
+            xhrFields: {
+                responseType: 'blob' // Set the response type to blob to handle binary data
+            },
+            success: function (data) {
+                debugger
+                var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download =  'Daily-ReportFile.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+
+                //var iframe = $('<iframe>', {
+                //    id: 'downloadFrame',
+                //    style: 'display: none'
+                //}).appendTo('body');
+
+                //iframe.attr('src', '/Home/ExportData' + );
+
+                //alert('Export initiated! Please check your download folder.');
+
+                //setTimeout(function () {
+                //    iframe.remove();
+                //}, 5000);
+            },
+            error: function (xyz) {
+                $('.loading-modal').hide();
+                alert('errors');
+            }
+        });
+    }   
+
+</script>
